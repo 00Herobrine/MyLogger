@@ -1,0 +1,9 @@
+name: MyLogger
+prefix: MyLog
+version: 1
+main: x00Hero.MyLogger.Main
+api-version: 1.18
+commands:
+  log:
+    description: "Opens General Logging GUI (player args optional)"
+    usage: "Usage: /<command> [player]"
