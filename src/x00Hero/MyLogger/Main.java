@@ -1,19 +1,19 @@
 package x00Hero.MyLogger;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.ArrayList;
+import x00Hero.MyLogger.Events.MenuClick;
+import x00Hero.MyLogger.Events.PlayerMineEvent;
 
 public class Main extends JavaPlugin {
-    Plugin plugin;
-    ArrayList<Material> logMats = new ArrayList<>();
+    public static Plugin plugin;
+
     public void onEnable() {
         // do the things
         plugin = this;
         Bukkit.getPluginManager().registerEvents(new PlayerMineEvent(), plugin);
+        Bukkit.getPluginManager().registerEvents(new MenuClick(), plugin);
     }
 
 }
