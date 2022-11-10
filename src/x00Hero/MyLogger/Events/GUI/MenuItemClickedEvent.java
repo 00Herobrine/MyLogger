@@ -1,5 +1,6 @@
-package x00Hero.MyLogger.Events;
+package x00Hero.MyLogger.Events.GUI;
 
+import org.bukkit.block.data.type.Switch;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -48,6 +49,7 @@ public class MenuItemClickedEvent extends Event implements Cancellable {
     @Override
     public void setCancelled(boolean b) {
         isCancelled = b;
+        getEvent().setCancelled(true);
 //        event.setCancelled(true);
     }
 

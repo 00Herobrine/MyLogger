@@ -30,7 +30,6 @@ public class ItemBuilder {
     }
 
     public ItemBuilder(Material MATERIAL, int AMOUNT, String NAME, String LORE) {
-
         ItemStack ITEM = new ItemStack(MATERIAL, AMOUNT);
         ItemMeta meta = ITEM.getItemMeta();
         meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', NAME));

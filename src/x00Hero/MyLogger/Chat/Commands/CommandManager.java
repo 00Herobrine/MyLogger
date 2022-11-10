@@ -6,6 +6,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerCommandSendEvent;
+import x00Hero.MyLogger.Chat.ChatController;
 import x00Hero.MyLogger.LogController;
 
 import java.util.UUID;

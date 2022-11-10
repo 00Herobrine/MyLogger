@@ -1,7 +1,6 @@
-package x00Hero.MyLogger.Events;
+package x00Hero.MyLogger.Events.GUI;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,12 +12,23 @@ import x00Hero.MyLogger.GUI.MenuItem;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MenuClick implements Listener {
+public class MenuController implements Listener {
     private static HashMap<Player, Menu> inMenus = new HashMap<>();
 
+    @EventHandler
     public void MenuClicked(MenuItemClickedEvent event) {
+        Player player = event.getWhoClicked();
+        Menu menu = event.getMenu();
+        MenuItem menuItem = event.getMenuItem();
+        if(menuItem.isCancelClick()) event.setCancelled(true);
         switch(event.getID()) {
-            case "cunt":
+            case "menu-page-next":
+                menu.nextPage(player);
+                break;
+            case "menu-page-previous":
+                menu.prevPage(player);
+                break;
+            default:
                 break;
         }
     }
@@ -31,13 +41,10 @@ public class MenuClick implements Listener {
     public void inventoryClick(InventoryClickEvent e) {
         Player p = (Player) e.getWhoClicked();
         if(e.getCurrentItem() == null || e.getCurrentItem().getType() == Material.AIR) return;
-        String title = ChatColor.stripColor(e.getView().getTitle());
-        String itemName = ChatColor.stripColor(e.getCurrentItem().getItemMeta().getDisplayName());
         if(e.getCurrentItem().equals(Menu.nothing.getItemStack())) {
             e.setCancelled(true);
             return;
         }
-
         if(inMenus.containsKey(p)) {
             Menu menuViewer = inMenus.get(p);
             if(e.getView().getTopInventory().equals(menuViewer.getCurrentInventory())) {

@@ -5,8 +5,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import x00Hero.MyLogger.Chat.Commands.ChatController;
-import x00Hero.MyLogger.Events.MenuClick;
+import x00Hero.MyLogger.Chat.ChatController;
+import x00Hero.MyLogger.Events.GUI.MenuController;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -129,7 +129,7 @@ public class Menu {
         selPage = page;
         MenuPage menuPage = menuPages.get(page);
         menuPage.open(p);
-        MenuClick.setMenu(p, this);
+        MenuController.setMenu(p, this);
     }
 
     public void nextPage(Player p) {

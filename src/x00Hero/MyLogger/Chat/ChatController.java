@@ -1,4 +1,4 @@
-package x00Hero.MyLogger.Chat.Commands;
+package x00Hero.MyLogger.Chat;
 
 import org.bukkit.entity.Player;
 import x00Hero.MyLogger.Main;
