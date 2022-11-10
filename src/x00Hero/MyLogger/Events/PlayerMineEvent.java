@@ -1,7 +1,9 @@
 package x00Hero.MyLogger.Events;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -14,6 +16,7 @@ import x00Hero.MyLogger.File.PlayerFile;
 import x00Hero.MyLogger.Main;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -31,50 +34,66 @@ public class PlayerMineEvent implements Listener {
 
     public String getTime() {
         Date date = new Date();
-        LocalDateTime time = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         String pattern = "E, dd MMM yyyy HH:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        return simpleDateFormat.format(time);
+        return simpleDateFormat.format(date);
     }
 
     @EventHandler
-    public void OreLog(OreLogEvent e) {
+    public void PlayerBreakEvent(BlockBreakEvent e) {
         Player player = e.getPlayer();
         Block block = e.getBlock();
-        File file = PlayerFile.getTodaysFile(player);
-        File infoFile = PlayerFile.getInfoFile(player);
-        YamlConfiguration info = YamlConfiguration.loadConfiguration(infoFile);
-        YamlConfiguration mineLog = YamlConfiguration.loadConfiguration(file);
-        // Initial key is the player's world
-        String worldName = player.getWorld().getName();
-        ConfigurationSection worldSection = mineLog.getConfigurationSection(worldName);
-        ArrayList<LoggedVein> loggedVeins = new ArrayList<>();
-        UUID veinID = UUID.randomUUID();
-        Location lastMined = info.getLocation("last-mined");
-        assert lastMined != null;
-        double distance = lastMined.distanceSquared(block.getLocation());
-        if(lastMined.getWorld() == block.getWorld() && distance < veinDistance) {
-            Location veinStart = info.getLocation("vein-start");
-            assert veinStart != null;
-            int x = veinStart.getBlockX();
-            int y = veinStart.getBlockY();
-            int z = veinStart.getBlockZ();
-            String locString = x + ", " + y + ", " + z;
-            String blockPath = veinID + ".blocks." + block.getWorld().getName() + "." + locString;
-            mineLog.set(blockPath + ".light", 13);
-            mineLog.set(blockPath + ".time", getTime());
-        } else {
-            info.set("vein-start", block.getLocation());
-        }
-        info.set("last-mined", block.getLocation());
-    }
-
-    @EventHandler
-    public void PlayerMineEvent(BlockBreakEvent e) {
-        Player player = e.getPlayer();
-        Block block = e.getBlock();
+        Main.plugin.getLogger().info("doing things");
         if(player.hasPermission("mylogger.log." + e.getBlock().getType())) {
-            Bukkit.getPluginManager().callEvent(new OreLogEvent(player, block));
+            File monthFile = PlayerFile.getMonthFile(player);
+            File infoFile = PlayerFile.getInfoFile(player);
+            File file = PlayerFile.getTodaysFile(player);
+            try {
+                if(!monthFile.exists()) monthFile.mkdir();
+                if(!infoFile.exists()) infoFile.createNewFile();
+                if(!file.exists()) file.createNewFile();
+            } catch(IOException ex) {
+                ex.printStackTrace();
+            }
+            YamlConfiguration info = YamlConfiguration.loadConfiguration(infoFile);
+            YamlConfiguration mineLog = YamlConfiguration.loadConfiguration(file);
+            String veinID = info.getString("vein-id");
+            String blockID = RandomStringUtils.randomAlphanumeric(8);
+            if(veinID == null) veinID = RandomStringUtils.randomAlphanumeric(8);
+            Location lastMined = info.getLocation("last-mined");
+            boolean newVein = false;
+            if(lastMined == null) {
+                newVein = true;
+                lastMined = e.getBlock().getLocation();
+            }
+            double distance = lastMined.distance(e.getBlock().getLocation());
+            String matString = mineLog.getString(veinID + ".material");
+            Material material;
+            if(matString == null) material = block.getType(); else material = Material.valueOf(matString);
+            if(distance > veinDistance || block.getType() != material || newVein) {
+                // new vein
+                veinID = RandomStringUtils.randomAlphanumeric(8);
+                info.set("vein-id", veinID);
+                mineLog.set(veinID + ".material", block.getType().toString());
+            }
+            int x = lastMined.getBlockX();
+            int y = lastMined.getBlockY();
+            int z = lastMined.getBlockZ();
+            String locString = x + ", " + y + ", " + z;
+            String blockPath = veinID + ".blocks." + blockID + ".";
+            int light = player.getLocation().getBlock().getLightLevel();
+            int skyLight = player.getLocation().getBlock().getLightFromSky();
+            mineLog.set(blockPath + ".light", light + " (" + skyLight + ")");
+            mineLog.set(blockPath + ".time", getTime());
+            mineLog.set(blockPath + ".location", block.getWorld().getName() + " @ " + locString);
+            info.set("last-mined", block.getLocation());
+            try {
+                info.save(infoFile);
+                mineLog.save(file);
+            } catch(IOException ex) {
+                ex.printStackTrace();
+            }
         }
     }
+
 }

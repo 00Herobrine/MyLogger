@@ -15,7 +15,8 @@ import java.util.UUID;
 public class PlayerFile {
     private static String startPath = Main.plugin.getDataFolder() + "/players/{uuid}/";
     private static String infoPath = startPath + "info.yml";
-    private static String mineLogPath = startPath + "{MM}-{YY}/{DD}.yml";
+    private static String monthPath = startPath + "{MM}-{YY}/";
+    private static String mineLogPath = monthPath + "{DD}.yml";
 
     public boolean hasTodaysMiningLog(Player player) {
         File miningLog = new File(getTodaysPath(player));
@@ -39,7 +40,7 @@ public class PlayerFile {
         DateFormat df = new SimpleDateFormat("yy");
         String day = localDate.getDayOfMonth() + "";
         String month = localDate.getMonthValue() + "";
-        String year = df.format(localDate.getYear());
+        String year = df.format(date);
         return message.replace("{uuid}", uuid.toString()).replace("{DD}", day).replace("{MM}", month).replace("{YY}", year);
     }
 
@@ -47,16 +48,16 @@ public class PlayerFile {
         return format(infoPath, uuid);
     }
 
-    public static File getMineLogFile(UUID uuid) {
-        return new File(format(mineLogPath, uuid));
+    public static File getMonthFile(Player player) {
+        return getMonthFile(player.getUniqueId());
     }
 
-    public static String getMineLogPath(Player player) {
-        return getMineLogPath(player.getUniqueId());
+    public static File getMonthFile(UUID uuid) {
+        return new File(getMonthPath(uuid));
     }
 
-    public static String getMineLogPath(UUID uuid) {
-        return format(mineLogPath, uuid);
+    public static String getMonthPath(UUID uuid) {
+        return format(monthPath, uuid);
     }
 
     public static File getTodaysFile(Player player) {
@@ -80,6 +81,6 @@ public class PlayerFile {
     }
 
     public static String getTodaysPath(UUID uuid) {
-        return format(startPath, uuid);
+        return format(mineLogPath, uuid);
     }
 }

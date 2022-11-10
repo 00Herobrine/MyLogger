@@ -9,9 +9,12 @@ import org.bukkit.event.player.PlayerCommandSendEvent;
 import x00Hero.MyLogger.Chat.ChatController;
 import x00Hero.MyLogger.LogController;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class CommandManager implements CommandExecutor {
+
+    ArrayList<UUID> debugPlayers = new ArrayList<>();
 
     public void CommandList(PlayerCommandSendEvent e) {
 
@@ -38,6 +41,15 @@ public class CommandManager implements CommandExecutor {
                             } else {
                                 LogController.modAlerts.remove(player.getUniqueId());
                                 ChatController.sendMessage(player, 1);
+                            }
+                        } else if(args[0].equalsIgnoreCase("debug")) {
+                            UUID uuid = player.getUniqueId();
+                            if(debugPlayers.contains(uuid)) {
+                                debugPlayers.remove(uuid);
+                                ChatController.sendMessage(player, 5);
+                            } else {
+                                debugPlayers.add(uuid);
+                                ChatController.sendMessage(player, 6);
                             }
                         }
                         Player onlineTar = Bukkit.getPlayer(args[0]);

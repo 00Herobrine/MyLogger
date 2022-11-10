@@ -1,0 +1,16 @@
+path: /players/{uuid}/{MM}-{YY}/{DD}.yml
+vein-distance: 4 # max distance between last and current location mined to be considered a vein
+UI:
+    months:
+        01: PAPER
+        02: OAK_WOOD
+    days:
+        01: PAPER
+messages:
+    0: [MyLog]
+    1: '{prefix} added to log list'
+    2: '{prefix} removed from log list'
+    3: '{prefix} invalid command args'
+    4: '{prefix} page not found'
+    5: '{prefix} removed from debug'
+    6: '{prefix} added to debug'
