@@ -7,8 +7,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerCommandSendEvent;
 import x00Hero.MyLogger.Chat.ChatController;
+import x00Hero.MyLogger.File.PlayerFile;
+import x00Hero.MyLogger.GUI.PlayerMenu;
 import x00Hero.MyLogger.LogController;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -23,7 +26,7 @@ public class CommandManager implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(!(sender instanceof Player)) {
-            sender.sendMessage("Only Players can run this command.");
+            sender.sendMessage(ChatController.getMessage(10));
             return false;
         }
         Player player = (Player) sender;
@@ -35,12 +38,16 @@ public class CommandManager implements CommandExecutor {
                     case 1:
                         // player gui
                         if(args[0].equalsIgnoreCase("admin")) {
-                            if(!LogController.modAlerts.contains(player.getUniqueId())) {
-                                LogController.modAlerts.add(player.getUniqueId());
-                                ChatController.sendMessage(player, 0);
+                            if(player.hasPermission("mylogger.log.overwatch")) {
+                                if(!LogController.modAlerts.contains(player.getUniqueId())) {
+                                    LogController.modAlerts.add(player.getUniqueId());
+                                    ChatController.sendMessage(player, 0);
+                                } else {
+                                    LogController.modAlerts.remove(player.getUniqueId());
+                                    ChatController.sendMessage(player, 1);
+                                }
                             } else {
-                                LogController.modAlerts.remove(player.getUniqueId());
-                                ChatController.sendMessage(player, 1);
+                                ChatController.sendMessage(player, 7);
                             }
                         } else if(args[0].equalsIgnoreCase("debug")) {
                             UUID uuid = player.getUniqueId();
@@ -55,6 +62,13 @@ public class CommandManager implements CommandExecutor {
                         Player onlineTar = Bukkit.getPlayer(args[0]);
                         UUID target;
                         if(onlineTar == null) target = Bukkit.getOfflinePlayer(args[0]).getUniqueId(); else target = onlineTar.getUniqueId();
+                        File file = PlayerFile.getPlayerFolder(target);
+                        if(file.exists()) {
+                            PlayerMenu.yearMenu(player, target);
+                            ChatController.sendMessage(player, 8);
+                        } else {
+                            ChatController.sendMessage(player, 9);
+                        }
                         break;
                     default:
                         ChatController.sendMessage(player, 2);

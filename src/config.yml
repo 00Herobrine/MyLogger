@@ -1,16 +1,24 @@
-path: /players/{uuid}/{MM}-{YY}/{DD}.yml
+path: '/players/{uuid}/{YY}/{MM}/{DD}.yml'
 vein-distance: 4 # max distance between last and current location mined to be considered a vein
 UI:
+    years:
+        material: DIAMOND
     months:
-        01: PAPER
-        02: OAK_WOOD
+        material: CHEST
+        1: PAPER
+        2: OAK_WOOD
     days:
-        01: PAPER
+        material: PAPER
+        1: PAPER
 messages:
-    0: [MyLog]
+    0: '[MyLog]'
     1: '{prefix} added to log list'
     2: '{prefix} removed from log list'
     3: '{prefix} invalid command args'
     4: '{prefix} page not found'
     5: '{prefix} removed from debug'
     6: '{prefix} added to debug'
+    7: '{prefix} You do not have permission for this command.'
+    8: "{prefix} Opened {target}'s menu"
+    9: "{prefix} Couldn't find '{target}'!"
+    10: "{prefix} Only players can run this command!"

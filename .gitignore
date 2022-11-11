@@ -27,3 +27,4 @@ out/production/MyLogger/x00Hero/MyLogger/GUI/MenuPage.class
 out/production/MyLogger/x00Hero/MyLogger/LogController.class
 out/production/MyLogger/x00Hero/MyLogger/Main.class
 src/META-INF/MANIFEST.MF
+*.class

@@ -1,13 +1,12 @@
 package x00Hero.MyLogger.Events.GUI;
 
-import org.bukkit.block.data.type.Switch;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import x00Hero.MyLogger.GUI.Menu;
-import x00Hero.MyLogger.GUI.MenuItem;
+import x00Hero.MyLogger.GUI.API.Menu;
+import x00Hero.MyLogger.GUI.API.MenuItem;
 
 public class MenuItemClickedEvent extends Event implements Cancellable {
     private MenuItem menuItem;

@@ -1,4 +1,4 @@
-package x00Hero.MyLogger.GUI;
+package x00Hero.MyLogger.GUI.API;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

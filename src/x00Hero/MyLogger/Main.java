@@ -24,6 +24,7 @@ public class Main extends JavaPlugin {
         saveDefaultConfig();
         Bukkit.getPluginManager().registerEvents(new MenuController(), plugin);
         Bukkit.getPluginManager().registerEvents(new PlayerMineEvent(), plugin);
+        registerCommands();
     }
 
     public void registerCommands() {

@@ -2,18 +2,63 @@ package x00Hero.MyLogger.Events.GUI;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import x00Hero.MyLogger.GUI.Menu;
-import x00Hero.MyLogger.GUI.MenuItem;
+import x00Hero.MyLogger.GUI.API.Menu;
+import x00Hero.MyLogger.GUI.API.MenuItem;
+import x00Hero.MyLogger.Main;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MenuController implements Listener {
     private static HashMap<Player, Menu> inMenus = new HashMap<>();
+    private static HashMap<String, Material> customDayMats = new HashMap<>();
+    private static HashMap<String, Material> customMonthMats = new HashMap<>();
+    private static HashMap<String, Material> customYearMats = new HashMap<>();
+
+    public void cacheCustomMats() {
+        ArrayList<String> store = new ArrayList<>();
+        store.add("days");
+        store.add("months");
+        store.add("years");
+        FileConfiguration config = Main.plugin.getConfig();
+        for(String curStore : store) {
+            ConfigurationSection configSection = config.getConfigurationSection("UI." + store);
+            for(String key : configSection.getKeys(false)) {
+                String value = configSection.getString(key);
+                Material mat = Material.valueOf(value);
+                switch(curStore) {
+                    case "days" -> customDayMats.put(key, mat);
+                    case "months" -> customMonthMats.put(key, mat);
+                    case "years" -> customYearMats.put(key, mat);
+                }
+            }
+        }
+    }
+
+    public static boolean hasCustomItem(String num, String type) { // date number, specify whether it's a day, year, or month
+        return switch(type) {
+            case "day", "days" -> customDayMats.containsKey(num);
+            case "month", "months" -> customMonthMats.containsKey(num);
+            case "year", "years" -> customYearMats.containsKey(num);
+            default -> false;
+        };
+    }
+
+    public static Material getCustomItem(String num, String type) {
+        return switch(type) {
+            case "day", "days" -> customDayMats.get(num);
+            case "month", "months" -> customMonthMats.get(num);
+            case "year", "years" -> customYearMats.get(num);
+            default -> null;
+        };
+    }
 
     @EventHandler
     public void MenuClicked(MenuItemClickedEvent event) {

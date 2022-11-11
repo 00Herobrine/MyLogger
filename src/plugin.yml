@@ -6,4 +6,4 @@ api-version: 1.18
 commands:
   log:
     description: "Opens General Logging GUI (player args optional)"
-    usage: "Usage: /<command> [player]"
+    #usage: "Usage: /<command> [player]"

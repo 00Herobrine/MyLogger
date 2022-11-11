@@ -1,15 +1,15 @@
 package x00Hero.MyLogger.Events.GUI;
 
-import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 public class LoggedBlock {
-    Material material;
+    ItemStack itemStack;
     Integer light;
     String time, location;
     LoggedVein loggedVein;
 
-    public LoggedBlock(Material material, Integer light, String time, String location) {
-        this.material = material;
+    public LoggedBlock(ItemStack itemStack, Integer light, String time, String location) {
+        this.itemStack = itemStack;
         this.light = light;
         this.time = time;
         this.location = location;
@@ -23,8 +23,8 @@ public class LoggedBlock {
         return loggedVein;
     }
 
-    public Material getMaterial() {
-        return material;
+    public ItemStack getItemStack() {
+        return itemStack;
     }
 
     public Integer getLight() {

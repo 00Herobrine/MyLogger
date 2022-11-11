@@ -1,28 +1,21 @@
 package x00Hero.MyLogger.Events;
 
 import org.apache.commons.lang.RandomStringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import x00Hero.MyLogger.Events.GUI.LoggedVein;
 import x00Hero.MyLogger.File.PlayerFile;
 import x00Hero.MyLogger.Main;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.UUID;
 
 public class PlayerMineEvent implements Listener {
 
@@ -45,18 +38,20 @@ public class PlayerMineEvent implements Listener {
         Block block = e.getBlock();
         Main.plugin.getLogger().info("doing things");
         if(player.hasPermission("mylogger.log." + e.getBlock().getType())) {
-            File monthFile = PlayerFile.getMonthFile(player);
+            File yearFolder = PlayerFile.getYearFolder(player);
+            File monthFolder = PlayerFile.getMonthFolder(player);
             File infoFile = PlayerFile.getInfoFile(player);
-            File file = PlayerFile.getTodaysFile(player);
+            File mineFile = PlayerFile.getTodaysFile(player);
             try {
-                if(!monthFile.exists()) monthFile.mkdir();
+                if(!yearFolder.exists()) yearFolder.mkdir();
+                if(!monthFolder.exists()) monthFolder.mkdir();
                 if(!infoFile.exists()) infoFile.createNewFile();
-                if(!file.exists()) file.createNewFile();
+                if(!mineFile.exists()) mineFile.createNewFile();
             } catch(IOException ex) {
                 ex.printStackTrace();
             }
             YamlConfiguration info = YamlConfiguration.loadConfiguration(infoFile);
-            YamlConfiguration mineLog = YamlConfiguration.loadConfiguration(file);
+            YamlConfiguration mineLog = YamlConfiguration.loadConfiguration(mineFile);
             String veinID = info.getString("vein-id");
             String blockID = RandomStringUtils.randomAlphanumeric(8);
             if(veinID == null) veinID = RandomStringUtils.randomAlphanumeric(8);
@@ -89,7 +84,7 @@ public class PlayerMineEvent implements Listener {
             info.set("last-mined", block.getLocation());
             try {
                 info.save(infoFile);
-                mineLog.save(file);
+                mineLog.save(mineFile);
             } catch(IOException ex) {
                 ex.printStackTrace();
             }

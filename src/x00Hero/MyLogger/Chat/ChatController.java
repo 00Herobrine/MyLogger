@@ -1,5 +1,6 @@
 package x00Hero.MyLogger.Chat;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import x00Hero.MyLogger.Main;
 
@@ -11,6 +12,6 @@ public class ChatController {
     }
 
     public static void sendMessage(Player player, Integer messageID) {
-        player.sendMessage(getMessage(messageID).replace("{prefix}", Prefix).replace("{player}", player.getDisplayName()));
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', getMessage(messageID).replace("{prefix}", Prefix).replace("{player}", player.getDisplayName())));
     }
 }

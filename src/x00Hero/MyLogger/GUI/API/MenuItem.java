@@ -1,4 +1,4 @@
-package x00Hero.MyLogger.GUI;
+package x00Hero.MyLogger.GUI.API;
 
 import org.bukkit.inventory.ItemStack;
 
@@ -9,6 +9,11 @@ public class MenuItem {
     private boolean enabled = true;
     private boolean cancelClick = true;
     private MenuPage menuPage;
+
+    public MenuItem(ItemStack itemStack, String ID) {
+        this.itemStack = itemStack;
+        announce = ID;
+    }
 
     public MenuItem(ItemStack itemStack, int slot, int page) {
         this.itemStack = itemStack;

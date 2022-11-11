@@ -1,4 +1,4 @@
-package x00Hero.MyLogger.GUI;
+package x00Hero.MyLogger.GUI.API;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -16,7 +16,6 @@ public class Menu {
     private HashMap<Integer, MenuPage> menuPages = new HashMap<>();
 
     public static ItemBuilder nothing = new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE, 1, " ");
-    private int pageSlot = 45;
     private int maxSlot = 53;
 
     private boolean isSecureContainer = false;
@@ -117,31 +116,31 @@ public class Menu {
         }
     }
 
-    public void openMenu(Player p) {
-        openMenu(p, 1);
+    public void openMenu(Player player) {
+        openMenu(player, 1);
     }
 
-    public void openMenu(Player p, int page) {
+    public void openMenu(Player player, int page) {
         if(!menuPages.containsKey(page)) {
-            ChatController.sendMessage(p, 4);
+            ChatController.sendMessage(player, 4);
             return;
         }
         selPage = page;
         MenuPage menuPage = menuPages.get(page);
-        menuPage.open(p);
-        MenuController.setMenu(p, this);
+        menuPage.open(player);
+        MenuController.setMenu(player, this);
     }
 
-    public void nextPage(Player p) {
+    public void nextPage(Player player) {
         selPage += 1;
         if(selPage > pages) selPage = 1;
-        openMenu(p, selPage);
+        openMenu(player, selPage);
     }
 
-    public void prevPage(Player p) {
+    public void prevPage(Player player) {
         selPage -= 1;
         if(selPage <= 0) selPage = pages;
-        openMenu(p, selPage);
+        openMenu(player, selPage);
     }
 
     public static Inventory fillInventory(Inventory i) {
