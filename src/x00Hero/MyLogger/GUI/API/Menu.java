@@ -97,7 +97,49 @@ public class Menu {
     }
 
     public Menu(String title, ArrayList<MenuItem> menuItems, boolean fillEmpty, boolean cancelClicks) {
-        int largestSlot = 0;
+        selPage = 1;
+        int curSlot = 0;
+        int curPage = 1;
+        MenuPage menuPage = new MenuPage(title, 54, fillEmpty, cancelClicks); // start from max then shrink down?
+        int subtract = 1;
+        int prevSlot = menuPage.prevPage.getSlot();
+        for(MenuItem menuItem : menuItems) {
+            int itemPageInt = menuItem.getPage();
+            int itemSlot = menuItem.getSlot();
+            if(curSlot > maxSlot - subtract && pages != 1) { // if it's just one page, don't need to do paging stuff
+                setPage(curPage, menuPage);
+                curSlot = 0;
+                curPage++;
+                menuPage = new MenuPage(title + " Pg " + curPage, size, fillEmpty, cancelClicks);
+                menuPage.addItem(menuItem);
+            } else { // add stuff to page
+                if(curSlot == prevSlot && curPage != 1) {
+                    menuPage.addItem(menuPage.prevPage);
+                    curSlot++;
+                }
+                menuItem.setSlot(curSlot);
+                menuPage.addItem(menuItem);
+            }
+            MenuPage itemPage = getMenuPage(itemPageInt);
+            if(itemSlot == -1 || itemSlot > maxSlot) {
+                if(curPage != itemPageInt) menuItem.setSlot(itemPage.getInv().firstEmpty()); else menuItem.setSlot(curSlot);
+            }
+            if(itemPage != null) { // page exists already
+                if(itemPage.getInv().getItem(itemSlot) != null) { // item already in slot
+                    itemSlot++; // if > maxSlot do next page
+                    menuItem.setSlot(itemSlot);
+                    itemPage.addItem(menuItem);
+                } else { // no item there place
+                    itemPage.addItem(menuItem);
+                }
+            } else { // doesn't exist
+                itemPage = new MenuPage(title + " Pg " + itemPageInt, 54, true, true);
+                itemPage.addItem(menuItem);
+            }
+
+            curSlot++;
+        }
+/*        int largestSlot = 0;
         int largestPage = 1;
         selPage = 1;
         for(MenuItem menuItem : menuItems) {
@@ -113,7 +155,7 @@ public class Menu {
                 menuPage.addItem(menuItem);
             }
             setPage(currentPage, menuPage);
-        }
+        }*/
     }
 
     public void openMenu(Player player) {

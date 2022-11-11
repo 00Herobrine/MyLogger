@@ -11,7 +11,8 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 
 public class MenuPage {
-    Inventory inventory;
+    private static Inventory inventory;
+    private static int curSlot = 0;
     public static int prevSlot = 45;
     public static int nextSlot = 53;
     int size, rows;
@@ -103,7 +104,11 @@ public class MenuPage {
         return size;
     }
 
-    public Inventory getInventory() {
+    public Inventory getInv() {
+        return inventory;
+    }
+
+    public static Inventory getInventory() {
         return inventory;
     }
 
@@ -127,6 +132,18 @@ public class MenuPage {
             }
         }
         return null;
+    }
+
+    public static int getNextSlot() {
+        return getInventory().firstEmpty();
+    }
+
+    public static int getCurSlot() {
+        return curSlot;
+    }
+
+    public static void setCurSlot(int curSlot) {
+        MenuPage.curSlot = curSlot;
     }
 
     public void setMenuItems(ArrayList<MenuItem> menuItems) {

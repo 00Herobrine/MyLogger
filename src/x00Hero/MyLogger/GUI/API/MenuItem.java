@@ -5,7 +5,7 @@ import org.bukkit.inventory.ItemStack;
 public class MenuItem {
     private ItemStack itemStack;
     private String announce;
-    private int slot, page = 1;
+    private int slot = -1, page = 1;
     private boolean enabled = true;
     private boolean cancelClick = true;
     private MenuPage menuPage;
