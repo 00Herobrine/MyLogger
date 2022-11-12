@@ -34,7 +34,9 @@ public class LogController {
             int z = location.getBlockZ();
             String message = ChatController.getMessage(12);
             String locString = x + ", " + y + ", " + z;
-            message = message.replace("{player}", miner.getDisplayName()).replace("{blocktype}", block.getType().toString()).replace("{xyz}", locString);
+            String oreColor = "&f";
+            if(ChatController.hasOreColor(block.getType())) oreColor = ChatController.getOreColor(block.getType());
+            message = message.replace("{player}", miner.getDisplayName()).replace("{blocktype}", block.getType().toString()).replace("{xyz}", locString).replace("{color}", ChatController.colorize(oreColor));
             player.sendMessage(message);
         }
     }
