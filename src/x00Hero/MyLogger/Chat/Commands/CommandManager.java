@@ -76,7 +76,8 @@ public class CommandManager implements CommandExecutor {
                                 File file = PlayerFile.getPlayerFolder(target);
                                 if(file.exists()) {
                                     PlayerMenu.yearMenu(player, target);
-                                    ChatController.sendMessage(player, 8);
+                                    player.sendMessage(ChatController.getMessage(8).replace("{target}", target.toString()));
+//                                    ChatController.sendMessage(player, 8);
                                 } else {
                                     ChatController.sendMessage(player, 9);
                                 }

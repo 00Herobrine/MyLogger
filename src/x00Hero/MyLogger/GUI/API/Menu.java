@@ -58,6 +58,49 @@ public class Menu {
         setPage(1, menuPage);
     }
 
+    public Menu(ArrayList<ItemStack> items, String title, String ID, boolean fillEmpty, boolean click) {
+        selPage = 1;
+        int curSlot = 0;
+        int curPage = 1;
+        size = items.size();
+        rows = (int) Math.ceil((double) size / 9);
+        pages = (int) Math.ceil((double) size / 54);
+        if(pages > 1) {
+            // account for the next item and the previous item on first and last page + next/prev for each page between
+            int addition = (2 + (Math.abs(2 - pages) * 2));
+            size += addition;
+            rows = (int) Math.ceil((double) size / 9);
+            pages = (int) Math.ceil((double) rows / 6);
+        }
+        int subtract = 1;
+        MenuPage menuPage = new MenuPage(title, size, fillEmpty, click);
+        int prevSlot = MenuPage.prevPage.getSlot();
+        for(ItemStack item : items) {
+            if(menuPages.containsKey(curPage)) menuPage = menuPages.get(curPage);
+            if(curSlot > maxSlot - subtract && pages != 1) {
+                if(curPage != pages) menuPage.addItem(MenuPage.nextPage);
+                setPage(curPage, menuPage);
+                curPage++;
+                curSlot = 0;
+                MenuItem menuItem = new MenuItem(item, curSlot, ID);
+                menuPage = new MenuPage(title + " Pg " + curPage, size, fillEmpty, click);
+                menuItem.setMenuPage(menuPage);
+                menuPage.addItem(menuItem);
+            } else {
+                if(curSlot == prevSlot && curPage != 1) {
+                    menuPage.addItem(MenuPage.prevPage);
+                    curSlot++;
+                }
+                MenuItem menuItem = new MenuItem(item, curSlot, ID);
+                menuItem.setMenuPage(menuPage);
+                menuPage.addItem(menuItem);
+            }
+            curSlot++;
+        }
+        if(curPage == pages && curSlot < prevSlot && curPage != 1) menuPage.addItem(MenuPage.prevPage);
+        setPage(curPage, menuPage);
+    }
+
     public Menu(ArrayList<ItemStack> items, String title, boolean fillEmpty, boolean click) {
         selPage = 1;
         int curSlot = 0;
@@ -74,26 +117,30 @@ public class Menu {
         }
         int subtract = 1;
         MenuPage menuPage = new MenuPage(title, size, fillEmpty, click);
-        int prevSlot = menuPage.prevPage.getSlot();
+        int prevSlot = MenuPage.prevPage.getSlot();
         for(ItemStack item : items) {
             if(menuPages.containsKey(curPage)) menuPage = menuPages.get(curPage);
             if(curSlot > maxSlot - subtract && pages != 1) {
-                if(curPage != pages) menuPage.addItem(menuPage.nextPage);
+                if(curPage != pages) menuPage.addItem(MenuPage.nextPage);
                 setPage(curPage, menuPage);
                 curPage++;
                 curSlot = 0;
+                MenuItem menuItem = new MenuItem(item, curSlot, "default");
                 menuPage = new MenuPage(title + " Pg " + curPage, size, fillEmpty, click);
-                menuPage.setItem(item, curSlot);
+                menuItem.setMenuPage(menuPage);
+                menuPage.addItem(menuItem);
             } else {
                 if(curSlot == prevSlot && curPage != 1) {
-                    menuPage.addItem(menuPage.prevPage);
+                    menuPage.addItem(MenuPage.prevPage);
                     curSlot++;
                 }
-                menuPage.setItem(item, curSlot);
+                MenuItem menuItem = new MenuItem(item, curSlot, "lol");
+                menuItem.setMenuPage(menuPage);
+                menuPage.addItem(menuItem);
             }
             curSlot++;
         }
-        if(curPage == pages && curSlot < prevSlot && curPage != 1) menuPage.addItem(menuPage.prevPage);
+        if(curPage == pages && curSlot < prevSlot && curPage != 1) menuPage.addItem(MenuPage.prevPage);
         setPage(curPage, menuPage);
     }
 
@@ -108,10 +155,10 @@ public class Menu {
             MenuPage itemPage = getMenuPage(itemPageInt);
             if(itemPage != null) { // page exists already
                 if(itemSlot == -1) { // not specified, add anywhere
-                    int emptySlot = itemPage.getInv().firstEmpty(); // if there even is an empty check
+                    int emptySlot = itemPage.getInventory().firstEmpty(); // if there even is an empty check
                     menuItem.setSlot(emptySlot);
                     itemPage.addItem(menuItem);
-                } else if(itemPage.getInv().getItem(itemSlot) != null) { // item already in slot
+                } else if(itemPage.getInventory().getItem(itemSlot) != null) { // item already in slot
                     itemSlot++; // need to make if > maxSlot add to next page
                     menuItem.setSlot(itemSlot);
                     itemPage.addItem(menuItem);
@@ -123,7 +170,7 @@ public class Menu {
                 int slotamt = slots;
                 if(slotamt > 5) slotamt = getAdjustedAmount(slots);
                 itemPage = new MenuPage(title, slotamt, fillEmpty, cancelClicks);
-                if(itemSlot == -1) menuItem.setSlot(itemPage.getInv().firstEmpty()); // no slot specified add anywhere
+                if(itemSlot == -1) menuItem.setSlot(itemPage.getInventory().firstEmpty()); // no slot specified add anywhere
                 itemPage.addItem(menuItem);
             }
             if(menuItem.getSlot() > itemPage.getLastSlot()) itemPage.setLastSlot(menuItem.getSlot());

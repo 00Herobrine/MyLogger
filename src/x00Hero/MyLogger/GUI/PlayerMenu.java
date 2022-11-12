@@ -86,13 +86,36 @@ public class PlayerMenu {
             String matString = log.getString(veinID + ".material");
             ConfigurationSection sec = log.getConfigurationSection(veinID + ".blocks");
             int amt = sec.getKeys(false).size();
+            if(amt > 64) amt = 64;
             Material material = Material.valueOf(matString);
-            ItemBuilder vein = new ItemBuilder(material, amt,"cunt", "cunt");
+            ItemBuilder vein = new ItemBuilder(material, amt, veinID, "&8View vein info");
+            vein.storeString("year", year);
+            vein.storeString("month", month);
+            vein.storeString("day", day);
+            vein.storeString("target", uuid.toString());
             veins.add(vein.getItemStack());
         }
         String date = day + "/" + month + "/" + year;
-        Menu veinMenu = new Menu(veins, "Veins for " + date, true, true);
+        Menu veinMenu = new Menu(veins, "Veins for " + date, "menu-vein", true, true);
         veinMenu.openMenu(player);
+    }
+
+    public static void blocksMenu(Player player, File logFile, String veinID) {
+        ArrayList<ItemStack> blocks = new ArrayList<>();
+        YamlConfiguration log = YamlConfiguration.loadConfiguration(logFile);
+        ConfigurationSection blockSection = log.getConfigurationSection(veinID + ".blocks");
+        Material material = Material.PAPER;
+        String matString = log.getString(veinID + ".material");
+        if(matString != null) material = Material.valueOf(matString);
+        for(String blockID : blockSection.getKeys(false)) {
+            String location = blockSection.getString(blockID + ".location");
+            String light = blockSection.getString(blockID + ".light");
+            String time = blockSection.getString(blockID + ".time");
+            ItemBuilder block = new ItemBuilder(material, "&6" + location, "&7Light: " + light + "\n&7" + time);
+            blocks.add(block.getItemStack());
+        }
+        Menu blockMenu = new Menu(blocks, "Vein viewer", true, true);
+        blockMenu.openMenu(player);
     }
 
 }

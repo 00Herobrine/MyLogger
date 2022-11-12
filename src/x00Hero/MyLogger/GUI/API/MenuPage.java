@@ -11,20 +11,20 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 
 public class MenuPage {
-    private static Inventory inventory;
+    private Inventory inventory;
     private int curSlot = 0;
     private int lastSlot = 0;
     public static int prevSlot = 45;
     public static int nextSlot = 53;
-    int size, rows;
+    private int size, rows;
     boolean fillEmpty = true;
     boolean cancelClicks = true;
-    static ItemBuilder prevBuilder = new ItemBuilder(Material.ORANGE_STAINED_GLASS_PANE, "&7Previous Page", "&8Click to return a page.");
-    static ItemBuilder nextBuilder = new ItemBuilder(Material.GREEN_STAINED_GLASS_PANE, "&aNext Page", "&8Click to forward a page.");
-    public MenuItem prevPage = new MenuItem(prevBuilder.getItemStack(), prevSlot, "menu-page-previous");
-    public MenuItem nextPage = new MenuItem(nextBuilder.getItemStack(), nextSlot, "menu-page-next");
+    private static ItemBuilder prevBuilder = new ItemBuilder(Material.ORANGE_STAINED_GLASS_PANE, "&7Previous Page", "&8Click to return a page.");
+    private static ItemBuilder nextBuilder = new ItemBuilder(Material.GREEN_STAINED_GLASS_PANE, "&aNext Page", "&8Click to forward a page.");
+    public static MenuItem prevPage = new MenuItem(prevBuilder.getItemStack(), prevSlot, "menu-page-previous");
+    public static MenuItem nextPage = new MenuItem(nextBuilder.getItemStack(), nextSlot, "menu-page-next");
     ArrayList<MenuItem> menuItems = new ArrayList<>();
-    String title;
+    private String title;
 
     public String Colorize(String input) {
         return ChatColor.translateAlternateColorCodes('&', input);
@@ -66,6 +66,7 @@ public class MenuPage {
         }
     }
 
+    @Deprecated(forRemoval = true)
     public void setItem(ItemStack item, Integer slot) {
         MenuItem menuItem = new MenuItem(item, slot, "default");
         menuItem.setMenuPage(this);
@@ -105,11 +106,7 @@ public class MenuPage {
         return size;
     }
 
-    public Inventory getInv() {
-        return inventory;
-    }
-
-    public static Inventory getInventory() {
+    public Inventory getInventory() {
         return inventory;
     }
 

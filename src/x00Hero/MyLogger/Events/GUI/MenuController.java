@@ -31,7 +31,8 @@ public class MenuController implements Listener {
     private static HashMap<String, Material> customDayMats = new HashMap<>();
     private static HashMap<String, Material> customMonthMats = new HashMap<>();
     private static HashMap<String, Material> customYearMats = new HashMap<>();
-
+    // maybe temporarily store the Player with playerFile in a hashmap so I don't need to constantly store all this in NBT (can be viewed by players)
+    // HashMap<Player, File> fileAccess
     public static void cacheCustomMats() {
         ArrayList<String> store = new ArrayList<>();
         store.add("days");
@@ -121,6 +122,17 @@ public class MenuController implements Listener {
                 target = UUID.fromString(targetString);
                 PlayerMenu.veinMenu(player, target, year, month, day);
                 // vein menu
+                break;
+            case "menu-vein":
+                year = getStoredString(itemStack,"year");
+                month = getStoredString(itemStack,"month");
+                day = getStoredString(itemStack,"day");
+                targetString = getStoredString(itemStack, "target");
+                assert targetString != null;
+                target = UUID.fromString(targetString);
+                File file = PlayerFile.getFileForDay(target, year, month, day);
+                String veinID = event.getMenuItem().getItemStack().getItemMeta().getDisplayName();
+                PlayerMenu.blocksMenu(player, file, veinID);
                 break;
             default:
                 break;
