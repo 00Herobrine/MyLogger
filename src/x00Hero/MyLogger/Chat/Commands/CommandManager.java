@@ -33,62 +33,70 @@ public class CommandManager implements CommandExecutor {
         Player player = (Player) sender;
         switch(command.getName().toLowerCase()) {
             case "log":
-                switch(args.length) {
-                    case 0:
-                        // basic gui
-                    case 1:
-                        // player gui
-                        switch(args[0]) {
-                            case "admin":
-                                if(player.hasPermission("mylogger.admin.overwatch")) {
-                                    if(!LogController.modAlerts.contains(player.getUniqueId())) {
-                                        LogController.modAlerts.add(player.getUniqueId());
-                                        ChatController.sendMessage(player, 0);
-                                    } else {
-                                        LogController.modAlerts.remove(player.getUniqueId());
-                                        ChatController.sendMessage(player, 1);
-                                    }
-                                } else {
-                                    ChatController.sendMessage(player, 7);
-                                }
-                                break;
-                            case "debug":
-                                UUID uuid = player.getUniqueId();
-                                if(debugPlayers.contains(uuid)) {
-                                    debugPlayers.remove(uuid);
-                                    ChatController.sendMessage(player, 5);
-                                } else {
-                                    debugPlayers.add(uuid);
-                                    ChatController.sendMessage(player, 6);
-                                }
-                                break;
-                            case "reload":
-                                if(player.hasPermission("mylogger.admin.reload")) {
-                                    Main.reloadConfigs();
-                                    ChatController.sendMessage(player, 11);
-                                }
-                                break;
-                            default:
-                                Player onlineTar = Bukkit.getPlayer(args[0]);
-                                UUID target;
-                                if(onlineTar == null) target = Bukkit.getOfflinePlayer(args[0]).getUniqueId();
-                                else target = onlineTar.getUniqueId();
-                                File file = PlayerFile.getPlayerFolder(target);
-                                if(file.exists()) {
-                                    PlayerMenu.yearMenu(player, target);
-                                    player.sendMessage(ChatController.getMessage(8).replace("{target}", target.toString()));
+                // player gui
+                switch(args[0]) {
+                    case "admin":
+                        if(player.hasPermission("mylogger.admin.overwatch")) {
+                            ArrayList<UUID> modAlerts = LogController.getModAlerts();
+                            if(!modAlerts.contains(player.getUniqueId())) {
+                                modAlerts.add(player.getUniqueId());
+                                ChatController.sendMessage(player, 1);
+                            } else {
+                                modAlerts.remove(player.getUniqueId());
+                                ChatController.sendMessage(player, 2);
+                            }
+                            LogController.setModAlerts(modAlerts);
+                        } else {
+                            ChatController.sendMessage(player, 7);
+                        }
+                        break;
+                    case "debug":
+                        UUID uuid = player.getUniqueId();
+                        if(player.hasPermission("mylogger.admin.debug")) {
+                            if(debugPlayers.contains(uuid)) {
+                                debugPlayers.remove(uuid);
+                                ChatController.sendMessage(player, 5);
+                            } else {
+                                debugPlayers.add(uuid);
+                                ChatController.sendMessage(player, 6);
+                            }
+                        } else {
+                            ChatController.sendMessage(player, 7);
+                        }
+                        break;
+                    case "reload":
+                        if(player.hasPermission("mylogger.admin.reload")) {
+                            Main.reloadConfigs();
+                            ChatController.sendMessage(player, 11);
+                        } else {
+                            ChatController.sendMessage(player, 7);
+                        }
+                        break;
+                    case "view":
+                        if(args.length > 1) {
+                            Player onlineTar = Bukkit.getPlayer(args[1]);
+                            UUID target;
+                            if(onlineTar == null) target = Bukkit.getOfflinePlayer(args[1]).getUniqueId();
+                            else target = onlineTar.getUniqueId();
+                            File file = PlayerFile.getPlayerFolder(target);
+                            if(file.exists()) {
+                                PlayerMenu.yearMenu(player, target);
+                                player.sendMessage(ChatController.getMessage(8).replace("{target}", args[1]));
 //                                    ChatController.sendMessage(player, 8);
-                                } else {
-                                    ChatController.sendMessage(player, 9);
-                                }
-                                break;
+                            } else {
+                                player.sendMessage(ChatController.getMessage(9).replace("{target}", args[1]));
+                            }
+                        } else {
+                            ChatController.sendMessage(player, 3);
                         }
                         break;
                     default:
-                        ChatController.sendMessage(player, 2);
+                        ChatController.sendMessage(player, 3);
                         break;
-
                 }
+                break;
+            default:
+                ChatController.sendMessage(player, 3);
                 break;
         }
         return false;

@@ -65,7 +65,7 @@ public class PlayerMenu {
             String dayString = day.getName().replace(".yml", "");
             Material material = Material.PAPER;
             if(MenuController.hasCustomItem(dayString, "day")) material = MenuController.getCustomItem(dayString, "day");
-            ItemBuilder itemBuilder = new ItemBuilder(material, dayString, "Open logs for " + dayString + "/" + month + "/" + year);
+            ItemBuilder itemBuilder = new ItemBuilder(material, dayString, "Open logs for " + month + "/" + dayString + "/" + year);
             itemBuilder.storeString("year", year);
             itemBuilder.storeString("month", month);
             itemBuilder.storeString("day", dayString);
@@ -95,7 +95,7 @@ public class PlayerMenu {
             vein.storeString("target", uuid.toString());
             veins.add(vein.getItemStack());
         }
-        String date = day + "/" + month + "/" + year;
+        String date = month + "/" + day + "/" + year;
         Menu veinMenu = new Menu(veins, "Veins for " + date, "menu-vein", true, true);
         veinMenu.openMenu(player);
     }

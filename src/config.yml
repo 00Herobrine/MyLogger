@@ -12,15 +12,16 @@ UI:
         material: PAPER
         1: PAPER
 messages:
-    0: '[MyLog]'
-    1: '{prefix} added to log list'
-    2: '{prefix} removed from log list'
-    3: '{prefix} invalid command args'
-    4: '{prefix} page not found'
-    5: '{prefix} removed from debug'
-    6: '{prefix} added to debug'
+    0: '&7[&aMyLog&7]&r'
+    1: '{prefix} Added to log list'
+    2: '{prefix} Removed from log list'
+    3: '{prefix} Invalid command args!'
+    4: '{prefix} Page not found!'
+    5: '{prefix} Removed from debug.'
+    6: '{prefix} Added to debug.'
     7: '{prefix} You do not have permission for this command.'
-    8: "{prefix} Opened {target}'s menu"
-    9: "{prefix} Couldn't find '{target}'!"
+    8: "{prefix} Viewing &a{target}'s&r logs."
+    9: "{prefix} Couldn't find '&c{target}&r'!"
     10: "Only players can run this command!"
-    11: "{prefix} reloaded configs"
+    11: "{prefix} &aConfigs reloaded."
+    12: "{prefix} {player} mined {blocktype} at {xyz}"

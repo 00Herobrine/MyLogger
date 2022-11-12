@@ -10,7 +10,7 @@ public class ChatController {
     public static String getMessage(Integer messageID) {
         String message = Main.plugin.getConfig().getString("messages." + messageID);
         assert message != null;
-        return message.replace("{prefix}", Prefix);
+        return ChatColor.translateAlternateColorCodes('&', message.replace("{prefix}", Prefix));
     }
 
     public static void sendMessage(Player player, Integer messageID) {

@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import x00Hero.MyLogger.File.PlayerFile;
+import x00Hero.MyLogger.LogController;
 import x00Hero.MyLogger.Main;
 
 import java.io.File;
@@ -36,8 +37,8 @@ public class PlayerMineEvent implements Listener {
     public void PlayerBreakEvent(BlockBreakEvent e) {
         Player player = e.getPlayer();
         Block block = e.getBlock();
-        Main.plugin.getLogger().info("doing things");
         if(player.hasPermission("mylogger.log." + e.getBlock().getType())) {
+            LogController.alertMods(player, block);
             File yearFolder = PlayerFile.getYearFolder(player);
             File monthFolder = PlayerFile.getMonthFolder(player);
             File infoFile = PlayerFile.getInfoFile(player);
