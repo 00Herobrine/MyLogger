@@ -1,4 +1,4 @@
-package x00Hero.MyLogger.Events.GUI;
+package x00Hero.MyLogger.GUI.API;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;

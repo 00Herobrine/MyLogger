@@ -61,8 +61,7 @@ public class PlayerFile {
         return getYearFolder(player.getUniqueId());
     }
     public static File getYearFolder(UUID uuid, String year) {
-        String path = yearPath;
-        path.replace("{uuid}", uuid.toString()).replace("{YYYY}", year);
+        String path = yearPath.replace("{uuid}", uuid.toString()).replace("{YYYY}", year);
         return new File(path);
     }
     public static File getYearFolder(UUID uuid) {
@@ -79,14 +78,17 @@ public class PlayerFile {
         return new File(getMonthPath(uuid));
     }
     public static File getMonthFolder(UUID uuid, String year, String month) {
-        String path = monthPath;
-        path.replace("{uuid}", uuid.toString()).replace("{YYYY}", year).replace("{MM}", month);
+        String path = monthPath.replace("{uuid}", uuid.toString()).replace("{YYYY}", year).replace("{MM}", month);
         return new File(path);
     }
     public static String getMonthPath(UUID uuid) {
         return format(monthPath, uuid);
     }
 
+    public static File getFileForDay(UUID uuid, String year, String month, String day) {
+        String path = mineLogPath.replace("{uuid}", uuid.toString()).replace("{YYYY}", year).replace("{MM}", month).replace("{DD}", day);
+        return new File(path);
+    }
     public static File getTodaysFile(Player player) {
         return getTodaysFile(player.getUniqueId());
     }

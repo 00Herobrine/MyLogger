@@ -12,7 +12,8 @@ import java.util.ArrayList;
 
 public class MenuPage {
     private static Inventory inventory;
-    private static int curSlot = 0;
+    private int curSlot = 0;
+    private int lastSlot = 0;
     public static int prevSlot = 45;
     public static int nextSlot = 53;
     int size, rows;
@@ -134,16 +135,24 @@ public class MenuPage {
         return null;
     }
 
-    public static int getNextSlot() {
+    public int getNextSlot() {
         return getInventory().firstEmpty();
     }
 
-    public static int getCurSlot() {
+    public int getCurSlot() {
         return curSlot;
     }
 
-    public static void setCurSlot(int curSlot) {
-        MenuPage.curSlot = curSlot;
+    public void setCurSlot(int curSlot) {
+        this.curSlot = curSlot;
+    }
+
+    public int getLastSlot() {
+        return lastSlot;
+    }
+
+    public void setLastSlot(int lastSlot) {
+        this.lastSlot = lastSlot;
     }
 
     public void setMenuItems(ArrayList<MenuItem> menuItems) {

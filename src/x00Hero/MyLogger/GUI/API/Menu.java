@@ -96,17 +96,38 @@ public class Menu {
         setPage(curPage, menuPage);
     }
 
-    public Menu(String title, ArrayList<MenuItem> menuItems, boolean fillEmpty, boolean cancelClicks) {
+    public Menu(String title, ArrayList<MenuItem> menuItems, int slots, boolean fillEmpty, boolean cancelClicks) {
         selPage = 1;
-        int curSlot = 0;
         int curPage = 1;
-        MenuPage menuPage = new MenuPage(title, 54, fillEmpty, cancelClicks); // start from max then shrink down?
         int subtract = 1;
-        int prevSlot = menuPage.prevPage.getSlot();
+        int prevSlot = MenuPage.prevSlot;
         for(MenuItem menuItem : menuItems) {
             int itemPageInt = menuItem.getPage();
             int itemSlot = menuItem.getSlot();
-            if(curSlot > maxSlot - subtract && pages != 1) { // if it's just one page, don't need to do paging stuff
+            MenuPage itemPage = getMenuPage(itemPageInt);
+            if(itemPage != null) { // page exists already
+                if(itemSlot == -1) { // not specified, add anywhere
+                    int emptySlot = itemPage.getInv().firstEmpty(); // if there even is an empty check
+                    menuItem.setSlot(emptySlot);
+                    itemPage.addItem(menuItem);
+                } else if(itemPage.getInv().getItem(itemSlot) != null) { // item already in slot
+                    itemSlot++; // need to make if > maxSlot add to next page
+                    menuItem.setSlot(itemSlot);
+                    itemPage.addItem(menuItem);
+                } else { // no item there place
+                    itemPage.addItem(menuItem);
+                }
+            } else { // Page doesn't exist make it and add item
+                if(itemPageInt != 1) title += " Pg " + itemPageInt;
+                itemPage = new MenuPage(title, getAdjustedAmount(slots), fillEmpty, cancelClicks);
+                if(itemSlot == -1) menuItem.setSlot(itemPage.getInv().firstEmpty()); // no slot specified add anywhere
+                itemPage.addItem(menuItem);
+            }
+            if(menuItem.getSlot() > itemPage.getLastSlot()) itemPage.setLastSlot(menuItem.getSlot());
+            setPage(itemPageInt, itemPage);
+        }
+
+/*            if(curSlot > maxSlot - subtract && pages != 1) { // if it's just one page, don't need to do paging stuff
                 setPage(curPage, menuPage);
                 curSlot = 0;
                 curPage++;
@@ -120,25 +141,10 @@ public class Menu {
                 menuItem.setSlot(curSlot);
                 menuPage.addItem(menuItem);
             }
-            MenuPage itemPage = getMenuPage(itemPageInt);
-            if(itemSlot == -1 || itemSlot > maxSlot) {
-                if(curPage != itemPageInt) menuItem.setSlot(itemPage.getInv().firstEmpty()); else menuItem.setSlot(curSlot);
-            }
-            if(itemPage != null) { // page exists already
-                if(itemPage.getInv().getItem(itemSlot) != null) { // item already in slot
-                    itemSlot++; // if > maxSlot do next page
-                    menuItem.setSlot(itemSlot);
-                    itemPage.addItem(menuItem);
-                } else { // no item there place
-                    itemPage.addItem(menuItem);
-                }
-            } else { // doesn't exist
-                itemPage = new MenuPage(title + " Pg " + itemPageInt, 54, true, true);
-                itemPage.addItem(menuItem);
-            }
-
+            setPage(itemPageInt, itemPage);
             curSlot++;
-        }
+            itemPage.setCurSlot(curSlot);
+        }*/
 /*        int largestSlot = 0;
         int largestPage = 1;
         selPage = 1;

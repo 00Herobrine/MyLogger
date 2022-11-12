@@ -2,13 +2,16 @@ package x00Hero.MyLogger.GUI.API;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
+import x00Hero.MyLogger.Main;
 
 import java.util.ArrayList;
 
 public class ItemBuilder {
-
     ItemStack item;
     Material material;
     String name;
@@ -133,5 +136,24 @@ public class ItemBuilder {
 
     public Material getMaterial() {
         return material;
+    }
+
+    public void storeString(String key, String value) {
+        NamespacedKey namespacedKey = new NamespacedKey(Main.plugin, key);
+        ItemMeta itemMeta = item.getItemMeta();
+        assert itemMeta != null;
+        itemMeta.getPersistentDataContainer().set(namespacedKey, PersistentDataType.STRING, value);
+        item.setItemMeta(itemMeta);
+    }
+
+    public String getStoredString(String key) {
+        NamespacedKey namespacedKey = new NamespacedKey(Main.plugin, key);
+        ItemMeta itemMeta = item.getItemMeta();
+        assert itemMeta != null;
+        PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+        if(container.has(namespacedKey, PersistentDataType.STRING)) {
+            return container.get(namespacedKey, PersistentDataType.STRING);
+        }
+        return null;
     }
 }

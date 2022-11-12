@@ -2,19 +2,29 @@ package x00Hero.MyLogger.Events.GUI;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.configuration.Configuration;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
+import x00Hero.MyLogger.File.PlayerFile;
+import x00Hero.MyLogger.GUI.API.ItemBuilder;
 import x00Hero.MyLogger.GUI.API.Menu;
 import x00Hero.MyLogger.GUI.API.MenuItem;
+import x00Hero.MyLogger.GUI.API.MenuItemClickedEvent;
+import x00Hero.MyLogger.GUI.PlayerMenu;
 import x00Hero.MyLogger.Main;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 public class MenuController implements Listener {
     private static HashMap<Player, Menu> inMenus = new HashMap<>();
@@ -60,18 +70,58 @@ public class MenuController implements Listener {
         };
     }
 
+    public String getStoredString(ItemStack itemStack, String key) {
+        NamespacedKey namespacedKey = new NamespacedKey(Main.plugin, key);
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        assert itemMeta != null;
+        PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+        if(container.has(namespacedKey, PersistentDataType.STRING)) {
+            return container.get(namespacedKey, PersistentDataType.STRING);
+        }
+        return null;
+    }
+
     @EventHandler
     public void MenuClicked(MenuItemClickedEvent event) {
         Player player = event.getWhoClicked();
         Menu menu = event.getMenu();
         MenuItem menuItem = event.getMenuItem();
         if(menuItem.isCancelClick()) event.setCancelled(true);
-        switch(event.getID()) {
+        String ID = event.getID();
+        String args[] = ID.split("/");
+        ItemStack itemStack = event.getMenuItem().getItemStack();
+        switch(args[0]) {
             case "menu-page-next":
                 menu.nextPage(player);
                 break;
             case "menu-page-previous":
                 menu.prevPage(player);
+                break;
+            case "menu-year":
+                String year = getStoredString(itemStack,"year");
+                String targetString = getStoredString(itemStack, "target");
+                assert targetString != null;
+                UUID target = UUID.fromString(targetString);
+                PlayerMenu.monthMenu(player, target, year);
+                break;
+            case "menu-month":
+                year = getStoredString(itemStack,"year");
+                String month = getStoredString(itemStack,"month");
+                targetString = getStoredString(itemStack, "target");
+                assert targetString != null;
+                target = UUID.fromString(targetString);
+                PlayerMenu.dayMenu(player, target, year, month);
+                break;
+            case "menu-day":
+                year = getStoredString(itemStack,"year");
+                month = getStoredString(itemStack,"month");
+                String day = getStoredString(itemStack,"day");
+                targetString = getStoredString(itemStack, "target");
+                assert targetString != null;
+                target = UUID.fromString(targetString);
+                File selFile = PlayerFile.getFileForDay(target, year, month, day);
+                player.sendMessage("Selected File: " + selFile.getPath());
+                // vein menu
                 break;
             default:
                 break;
