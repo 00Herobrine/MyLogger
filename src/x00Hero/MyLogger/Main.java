@@ -25,10 +25,16 @@ public class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new MenuController(), plugin);
         Bukkit.getPluginManager().registerEvents(new PlayerMineEvent(), plugin);
         registerCommands();
+        reloadConfigs();
     }
 
     public void registerCommands() {
         getCommand("log").setExecutor(new CommandManager());
+    }
+
+    public static void reloadConfigs(){
+        plugin.reloadConfig();
+        MenuController.cacheCustomMats();
     }
 
 }

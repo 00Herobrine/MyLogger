@@ -3,6 +3,7 @@ vein-distance: 4 # max distance between last and current location mined to be co
 UI:
     years:
         material: DIAMOND
+        2022: CHEST
     months:
         material: CHEST
         1: PAPER
@@ -21,4 +22,5 @@ messages:
     7: '{prefix} You do not have permission for this command.'
     8: "{prefix} Opened {target}'s menu"
     9: "{prefix} Couldn't find '{target}'!"
-    10: "{prefix} Only players can run this command!"
+    10: "Only players can run this command!"
+    11: "{prefix} reloaded configs"

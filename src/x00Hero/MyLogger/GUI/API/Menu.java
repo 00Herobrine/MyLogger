@@ -3,6 +3,7 @@ package x00Hero.MyLogger.GUI.API;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import x00Hero.MyLogger.Chat.ChatController;
@@ -119,7 +120,9 @@ public class Menu {
                 }
             } else { // Page doesn't exist make it and add item
                 if(itemPageInt != 1) title += " Pg " + itemPageInt;
-                itemPage = new MenuPage(title, getAdjustedAmount(slots), fillEmpty, cancelClicks);
+                int slotamt = slots;
+                if(slotamt > 5) slotamt = getAdjustedAmount(slots);
+                itemPage = new MenuPage(title, slotamt, fillEmpty, cancelClicks);
                 if(itemSlot == -1) menuItem.setSlot(itemPage.getInv().firstEmpty()); // no slot specified add anywhere
                 itemPage.addItem(menuItem);
             }

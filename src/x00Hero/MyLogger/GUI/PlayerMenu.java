@@ -2,6 +2,8 @@ package x00Hero.MyLogger.GUI;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import x00Hero.MyLogger.Events.GUI.MenuController;
@@ -24,7 +26,9 @@ public class PlayerMenu {
             if(!year.isDirectory()) continue;
             String yearString = year.getName();
             Material material = Material.PAPER;
-            if(MenuController.hasCustomItem(yearString, "year")) material = MenuController.getCustomItem(yearString, "year");
+            if(MenuController.hasCustomItem(yearString, "year")) {
+                material = MenuController.getCustomItem(yearString, "year");
+            }
             ItemBuilder itemBuilder = new ItemBuilder(material, yearString, "Open Months of " + yearString);
             itemBuilder.storeString("year", yearString);
             itemBuilder.storeString("target", uuid.toString());
@@ -58,10 +62,10 @@ public class PlayerMenu {
         ArrayList<MenuItem> menuItems = new ArrayList<>();
         File monthFolder = PlayerFile.getMonthFolder(uuid, year, month); // only does current year as of now
         for(File day : monthFolder.listFiles()) {
-            String dayString = day.getName();
+            String dayString = day.getName().replace(".yml", "");
             Material material = Material.PAPER;
             if(MenuController.hasCustomItem(dayString, "day")) material = MenuController.getCustomItem(dayString, "day");
-            ItemBuilder itemBuilder = new ItemBuilder(material, dayString, "Open Days of " + dayString);
+            ItemBuilder itemBuilder = new ItemBuilder(material, dayString, "Open logs for " + dayString + "/" + month + "/" + year);
             itemBuilder.storeString("year", year);
             itemBuilder.storeString("month", month);
             itemBuilder.storeString("day", dayString);
@@ -73,8 +77,22 @@ public class PlayerMenu {
         yMenu.openMenu(player);
     }
 
-    public void veinMenu(Player player, UUID uuid, String year, String month, String day) {
+    public static void veinMenu(Player player, UUID uuid, String year, String month, String day) {
         // list all veins for the day
+        ArrayList<ItemStack> veins = new ArrayList<>();
+        File mineLogFile = PlayerFile.getFileForDay(uuid, year, month, day);
+        YamlConfiguration log = YamlConfiguration.loadConfiguration(mineLogFile);
+        for(String veinID : log.getKeys(false)) {
+            String matString = log.getString(veinID + ".material");
+            ConfigurationSection sec = log.getConfigurationSection(veinID + ".blocks");
+            int amt = sec.getKeys(false).size();
+            Material material = Material.valueOf(matString);
+            ItemBuilder vein = new ItemBuilder(material, amt,"cunt", "cunt");
+            veins.add(vein.getItemStack());
+        }
+        String date = day + "/" + month + "/" + year;
+        Menu veinMenu = new Menu(veins, "Veins for " + date, true, true);
+        veinMenu.openMenu(player);
     }
 
 }

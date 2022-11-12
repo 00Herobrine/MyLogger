@@ -10,6 +10,7 @@ import x00Hero.MyLogger.Chat.ChatController;
 import x00Hero.MyLogger.File.PlayerFile;
 import x00Hero.MyLogger.GUI.PlayerMenu;
 import x00Hero.MyLogger.LogController;
+import x00Hero.MyLogger.Main;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -37,37 +38,49 @@ public class CommandManager implements CommandExecutor {
                         // basic gui
                     case 1:
                         // player gui
-                        if(args[0].equalsIgnoreCase("admin")) {
-                            if(player.hasPermission("mylogger.log.overwatch")) {
-                                if(!LogController.modAlerts.contains(player.getUniqueId())) {
-                                    LogController.modAlerts.add(player.getUniqueId());
-                                    ChatController.sendMessage(player, 0);
+                        switch(args[0]) {
+                            case "admin":
+                                if(player.hasPermission("mylogger.admin.overwatch")) {
+                                    if(!LogController.modAlerts.contains(player.getUniqueId())) {
+                                        LogController.modAlerts.add(player.getUniqueId());
+                                        ChatController.sendMessage(player, 0);
+                                    } else {
+                                        LogController.modAlerts.remove(player.getUniqueId());
+                                        ChatController.sendMessage(player, 1);
+                                    }
                                 } else {
-                                    LogController.modAlerts.remove(player.getUniqueId());
-                                    ChatController.sendMessage(player, 1);
+                                    ChatController.sendMessage(player, 7);
                                 }
-                            } else {
-                                ChatController.sendMessage(player, 7);
-                            }
-                        } else if(args[0].equalsIgnoreCase("debug")) {
-                            UUID uuid = player.getUniqueId();
-                            if(debugPlayers.contains(uuid)) {
-                                debugPlayers.remove(uuid);
-                                ChatController.sendMessage(player, 5);
-                            } else {
-                                debugPlayers.add(uuid);
-                                ChatController.sendMessage(player, 6);
-                            }
-                        }
-                        Player onlineTar = Bukkit.getPlayer(args[0]);
-                        UUID target;
-                        if(onlineTar == null) target = Bukkit.getOfflinePlayer(args[0]).getUniqueId(); else target = onlineTar.getUniqueId();
-                        File file = PlayerFile.getPlayerFolder(target);
-                        if(file.exists()) {
-                            PlayerMenu.yearMenu(player, target);
-                            ChatController.sendMessage(player, 8);
-                        } else {
-                            ChatController.sendMessage(player, 9);
+                                break;
+                            case "debug":
+                                UUID uuid = player.getUniqueId();
+                                if(debugPlayers.contains(uuid)) {
+                                    debugPlayers.remove(uuid);
+                                    ChatController.sendMessage(player, 5);
+                                } else {
+                                    debugPlayers.add(uuid);
+                                    ChatController.sendMessage(player, 6);
+                                }
+                                break;
+                            case "reload":
+                                if(player.hasPermission("mylogger.admin.reload")) {
+                                    Main.reloadConfigs();
+                                    ChatController.sendMessage(player, 11);
+                                }
+                                break;
+                            default:
+                                Player onlineTar = Bukkit.getPlayer(args[0]);
+                                UUID target;
+                                if(onlineTar == null) target = Bukkit.getOfflinePlayer(args[0]).getUniqueId();
+                                else target = onlineTar.getUniqueId();
+                                File file = PlayerFile.getPlayerFolder(target);
+                                if(file.exists()) {
+                                    PlayerMenu.yearMenu(player, target);
+                                    ChatController.sendMessage(player, 8);
+                                } else {
+                                    ChatController.sendMessage(player, 9);
+                                }
+                                break;
                         }
                         break;
                     default:

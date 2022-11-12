@@ -32,14 +32,14 @@ public class MenuController implements Listener {
     private static HashMap<String, Material> customMonthMats = new HashMap<>();
     private static HashMap<String, Material> customYearMats = new HashMap<>();
 
-    public void cacheCustomMats() {
+    public static void cacheCustomMats() {
         ArrayList<String> store = new ArrayList<>();
         store.add("days");
         store.add("months");
         store.add("years");
         FileConfiguration config = Main.plugin.getConfig();
         for(String curStore : store) {
-            ConfigurationSection configSection = config.getConfigurationSection("UI." + store);
+            ConfigurationSection configSection = config.getConfigurationSection("UI." + curStore);
             for(String key : configSection.getKeys(false)) {
                 String value = configSection.getString(key);
                 Material mat = Material.valueOf(value);
@@ -119,8 +119,7 @@ public class MenuController implements Listener {
                 targetString = getStoredString(itemStack, "target");
                 assert targetString != null;
                 target = UUID.fromString(targetString);
-                File selFile = PlayerFile.getFileForDay(target, year, month, day);
-                player.sendMessage("Selected File: " + selFile.getPath());
+                PlayerMenu.veinMenu(player, target, year, month, day);
                 // vein menu
                 break;
             default:
