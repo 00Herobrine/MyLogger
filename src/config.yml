@@ -1,5 +1,5 @@
 path: '/players/{uuid}/{YY}/{MM}/{DD}.yml'
-vein-distance: 4 # max distance between last and current location mined to be considered a vein
+vein-distance: 3 # max distance between last and current location mined to be considered a vein
 UI:
     years:
         material: DIAMOND
@@ -22,8 +22,8 @@ UI:
         IRON_ORE: '&e'
 messages:
     0: '&7[&aMyLog&7]&r'
-    1: '{prefix} &aAdded&r to log list'
-    2: '{prefix} &cRemoved&r from log list'
+    1: '{prefix} &aAdded&r to log list.'
+    2: '{prefix} &cRemoved&r from log list.'
     3: '{prefix} &cInvalid command args!'
     4: '{prefix} &cPage not found!'
     5: '{prefix} &cRemoved from debug.'

@@ -24,6 +24,10 @@ public class LogController {
         modAlerts.add(p.getUniqueId());
     }
 
+    public static void removeMod(Player p) {
+        modAlerts.remove(p.getUniqueId());
+    }
+
     public static void alertMods(Player miner, Block block) {
         for(UUID uuid : getModAlerts()) {
             Player player = Bukkit.getPlayer(uuid);

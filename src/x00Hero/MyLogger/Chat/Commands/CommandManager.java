@@ -5,7 +5,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerCommandSendEvent;
 import x00Hero.MyLogger.Chat.ChatController;
 import x00Hero.MyLogger.File.PlayerFile;
 import x00Hero.MyLogger.GUI.PlayerMenu;
@@ -20,10 +19,6 @@ public class CommandManager implements CommandExecutor {
 
     ArrayList<UUID> debugPlayers = new ArrayList<>();
 
-    public void CommandList(PlayerCommandSendEvent e) {
-
-    }
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(!(sender instanceof Player)) {
@@ -33,19 +28,16 @@ public class CommandManager implements CommandExecutor {
         Player player = (Player) sender;
         switch(command.getName().toLowerCase()) {
             case "log":
-                // player gui
                 switch(args[0]) {
                     case "admin":
                         if(player.hasPermission("mylogger.admin.overwatch")) {
-                            ArrayList<UUID> modAlerts = LogController.getModAlerts();
-                            if(!modAlerts.contains(player.getUniqueId())) {
-                                modAlerts.add(player.getUniqueId());
+                            if(!LogController.getModAlerts().contains(player.getUniqueId())) {
+                                LogController.addMod(player);
                                 ChatController.sendMessage(player, 1);
                             } else {
-                                modAlerts.remove(player.getUniqueId());
+                                LogController.removeMod(player);
                                 ChatController.sendMessage(player, 2);
                             }
-                            LogController.setModAlerts(modAlerts);
                         } else {
                             ChatController.sendMessage(player, 7);
                         }

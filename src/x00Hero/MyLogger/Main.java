@@ -28,8 +28,7 @@ public class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new MenuController(), plugin);
         Bukkit.getPluginManager().registerEvents(new PlayerMineEvent(), plugin);
         registerCommands();
-        MenuController.cacheCustomMats();
-//        reloadConfigs();
+        reloadConfigs();
     }
 
     public void registerCommands() {
@@ -44,6 +43,7 @@ public class Main extends JavaPlugin {
         plugin.reloadConfig();
         config = plugin.getConfig();
         MenuController.cacheCustomMats();
+        PlayerMineEvent.reloadConfig();
     }
 
 }

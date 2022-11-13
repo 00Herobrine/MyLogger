@@ -20,9 +20,9 @@ import java.util.Date;
 
 public class PlayerMineEvent implements Listener {
 
-    int veinDistance = Main.plugin.getConfig().getInt("vein-distance");
+    static int veinDistance = Main.plugin.getConfig().getInt("vein-distance");
 
-    public void reloadConfig() {
+    public static void reloadConfig() {
         veinDistance = Main.plugin.getConfig().getInt("vein-distance");
     }
 

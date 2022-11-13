@@ -3,9 +3,7 @@ package x00Hero.MyLogger.Chat;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.yaml.snakeyaml.Yaml;
 import x00Hero.MyLogger.Main;
 
 public class ChatController {

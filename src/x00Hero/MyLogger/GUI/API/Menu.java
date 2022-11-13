@@ -3,7 +3,6 @@ package x00Hero.MyLogger.GUI.API;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import x00Hero.MyLogger.Chat.ChatController;
@@ -176,42 +175,6 @@ public class Menu {
             if(menuItem.getSlot() > itemPage.getLastSlot()) itemPage.setLastSlot(menuItem.getSlot());
             setPage(itemPageInt, itemPage);
         }
-
-/*            if(curSlot > maxSlot - subtract && pages != 1) { // if it's just one page, don't need to do paging stuff
-                setPage(curPage, menuPage);
-                curSlot = 0;
-                curPage++;
-                menuPage = new MenuPage(title + " Pg " + curPage, size, fillEmpty, cancelClicks);
-                menuPage.addItem(menuItem);
-            } else { // add stuff to page
-                if(curSlot == prevSlot && curPage != 1) {
-                    menuPage.addItem(menuPage.prevPage);
-                    curSlot++;
-                }
-                menuItem.setSlot(curSlot);
-                menuPage.addItem(menuItem);
-            }
-            setPage(itemPageInt, itemPage);
-            curSlot++;
-            itemPage.setCurSlot(curSlot);
-        }*/
-/*        int largestSlot = 0;
-        int largestPage = 1;
-        selPage = 1;
-        for(MenuItem menuItem : menuItems) {
-            int currentSlot = menuItem.getSlot();
-            int currentPage = menuItem.getPage();
-            if(largestSlot < currentSlot) largestSlot = currentSlot;
-            if(largestPage < currentPage) largestPage = currentPage;
-            MenuPage menuPage = menuPages.get(currentPage);
-            if(menuPage != null) {
-                menuPage.addItem(menuItem);
-            } else {
-                menuPage = new MenuPage(title, largestSlot, fillEmpty, cancelClicks);
-                menuPage.addItem(menuItem);
-            }
-            setPage(currentPage, menuPage);
-        }*/
     }
 
     public void openMenu(Player player) {
