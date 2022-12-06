@@ -1,4 +1,4 @@
-package x00Hero.MyLogger.GUI.API;
+package x00Hero.MyLogger.GUI.Constructors;
 
 import org.bukkit.inventory.ItemStack;
 

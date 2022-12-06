@@ -1,29 +1,8 @@
-path: '/players/{uuid}/{YY}/{MM}/{DD}.yml'
 vein-distance: 3 # max distance between last and current location mined to be considered a vein
-UI:
-    years:
-        material: DIAMOND
-        2022: CHEST
-    months:
-        material: CHEST
-        1: PAPER
-        2: OAK_WOOD
-    days:
-        material: PAPER
-        1: PAPER
-    colors:
-        DIAMOND_ORE: '&b'
-        GOLD_ORE: '&6'
-        LAPIS_ORE: '&1'
-        EMERALD_ORE: '&a'
-        COPPER_ORE: '&2'
-        COAL_ORE: '&7'
-        REDSTONE_ORE: '&c'
-        IRON_ORE: '&e'
 messages:
     0: '&7[&aMyLog&7]&r'
-    1: '{prefix} &aAdded&r to log list.'
-    2: '{prefix} &cRemoved&r from log list.'
+    1: '{prefix} &aAdded&r to log list'
+    2: '{prefix} &cRemoved&r from log list'
     3: '{prefix} &cInvalid command args!'
     4: '{prefix} &cPage not found!'
     5: '{prefix} &cRemoved from debug.'
@@ -34,3 +13,45 @@ messages:
     10: "Only players can run this command!"
     11: "{prefix} &aConfigs reloaded."
     12: "{prefix} &a{player}&r mined {color}{blocktype}&r at {xyz}"
+UI:
+    autoSkip: true # skips to next menu if menu size == 1
+    years:
+        title: '&7Years of {player}' # title of specified menu
+        name: '&7{year}' # name for items in specified menu
+        lore: '&7View months of {year}.' # lore for items in specified menu
+        material: DIAMOND # default material for non-specified items
+        custom: # specify number specific materials
+            2022: CHEST
+    months:
+        title: '&7Months of {year}'
+        name: '&7{month}'
+        lore: '&7View days of {month}.'
+        material: CHEST
+        custom:
+            #1: PAPER
+            #2: OAK_WOOD
+    days:
+        title: '&7Days of {monthShort}. {year}'
+        name: '&7{day}'
+        lore: '&7View months of {Year}.'
+        material: PAPER
+        custom:
+            #1: PAPER
+    veins:
+        title: '&7Veins of {month}/{day}/{year}'
+        name: '&7Vein #{num}'
+        lore: "&8ID: {veinID}\n&7View vein info."
+        #deepslate-alts: false # includes the deepslate alternatives to normal ores
+    blocks:
+        title: '&7Viewing Vein ({veinID})'
+        name: '&6{World} @ {x}, {y}, {z}'
+        lore: "&8Light: {blockLight} ({skyLight})\n&8{time}"
+    colors:
+        DIAMOND_ORE: '&b'
+        GOLD_ORE: '&6'
+        LAPIS_ORE: '&1'
+        EMERALD_ORE: '&a'
+        COPPER_ORE: '&2'
+        COAL_ORE: '&7'
+        REDSTONE_ORE: '&c'
+        IRON_ORE: '&e'

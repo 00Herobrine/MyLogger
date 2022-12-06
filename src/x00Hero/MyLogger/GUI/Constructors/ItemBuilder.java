@@ -1,4 +1,4 @@
-package x00Hero.MyLogger.GUI.API;
+package x00Hero.MyLogger.GUI.Constructors;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -12,11 +12,11 @@ import x00Hero.MyLogger.Main;
 import java.util.ArrayList;
 
 public class ItemBuilder {
-    ItemStack item;
-    Material material;
-    String name;
-    ArrayList lore;
-    int amount;
+    private ItemStack item;
+    private Material material;
+    private String name;
+    private ArrayList lore;
+    private int amount;
 
     public ItemBuilder(Material MATERIAL, int AMOUNT, String NAME) {
         ItemStack ITEM = new ItemStack(MATERIAL, AMOUNT);

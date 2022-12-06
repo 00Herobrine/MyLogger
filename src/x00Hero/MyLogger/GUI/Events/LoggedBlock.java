@@ -1,4 +1,4 @@
-package x00Hero.MyLogger.Events.GUI;
+package x00Hero.MyLogger.GUI.Events;
 
 import org.bukkit.inventory.ItemStack;
 

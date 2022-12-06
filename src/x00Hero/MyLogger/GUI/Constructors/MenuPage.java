@@ -1,4 +1,4 @@
-package x00Hero.MyLogger.GUI.API;
+package x00Hero.MyLogger.GUI.Constructors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -23,7 +23,7 @@ public class MenuPage {
     private static ItemBuilder nextBuilder = new ItemBuilder(Material.GREEN_STAINED_GLASS_PANE, "&aNext Page", "&8Click to forward a page.");
     public static MenuItem prevPage = new MenuItem(prevBuilder.getItemStack(), prevSlot, "menu-page-previous");
     public static MenuItem nextPage = new MenuItem(nextBuilder.getItemStack(), nextSlot, "menu-page-next");
-    ArrayList<MenuItem> menuItems = new ArrayList<>();
+    private ArrayList<MenuItem> menuItems = new ArrayList<>();
     private String title;
 
     public String Colorize(String input) {

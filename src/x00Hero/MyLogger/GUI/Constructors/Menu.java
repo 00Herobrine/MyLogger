@@ -1,4 +1,4 @@
-package x00Hero.MyLogger.GUI.API;
+package x00Hero.MyLogger.GUI.Constructors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import x00Hero.MyLogger.Chat.ChatController;
-import x00Hero.MyLogger.Events.GUI.MenuController;
+import x00Hero.MyLogger.GUI.Events.MenuController;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -144,6 +144,44 @@ public class Menu {
     }
 
     public Menu(String title, ArrayList<MenuItem> menuItems, int slots, boolean fillEmpty, boolean cancelClicks) {
+/*        HashMap<Integer, MenuPage> updatedPages = new HashMap<>();
+        MenuPage tempPage = new MenuPage("temp", 54, fillEmpty, cancelClicks);
+        for(MenuItem menuItem2 : menuItems) {
+            int itemPageInt = menuItem2.getPage();
+            int itemSlot = menuItem2.getSlot();
+            if(itemSlot > 53) continue; // lmao bruh why are you making it bigger than the gui limit
+            MenuPage itemPage = getMenuPage(itemPageInt);
+            if(itemPage != null) { // page exists already
+                if(itemSlot == -1) { // not specified, add anywhere
+                    int firstEmpty = itemPage.getInventory().firstEmpty();
+                    if(firstEmpty != -1) { // isn't full, set slot
+                        menuItem2.setSlot(firstEmpty);
+                        tempPage.addItem(menuItem2);
+                    } else { // is full, move to next page and set slot
+                        boolean found = false;
+                        int sPage = itemPageInt;
+                        MenuPage emptyPage = getMenuPage(itemPageInt + 1);
+                        while(!found) {
+                            emptyPage = getMenuPage(sPage);
+                            if(emptyPage == null) emptyPage = new MenuPage("temp", 54, fillEmpty, cancelClicks); // doesn't exist, make it
+                            if(emptyPage.getInventory().firstEmpty() != -1)  { // has an empty, found
+                                found = true;
+                            }
+                            updatedPages.put(sPage, emptyPage);
+                            sPage++;
+                        }
+                        emptyPage.addItem(menuItem2);
+                    }
+                } else {
+
+                }
+            }
+        }
+        for(Integer page : updatedPages.keySet()) {
+            setPage(page, updatedPages.get(page));
+            getMenuPage(1).set;
+        }*/
+        // bro idek anymore ^^
         selPage = 1;
         int curPage = 1;
         int subtract = 1;

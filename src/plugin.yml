@@ -4,6 +4,6 @@ version: 1
 main: x00Hero.MyLogger.Main
 api-version: 1.18
 commands:
-  log:
+  logger:
     description: "Opens General Logging GUI (player args optional)"
-    usage: "Usage: /<command> [view] [player]"
+    #usage: "Usage: /<command> [view] [player]"

@@ -29,6 +29,7 @@ public class LogController {
     }
 
     public static void alertMods(Player miner, Block block) {
+        if(getModAlerts() == null) return;
         for(UUID uuid : getModAlerts()) {
             Player player = Bukkit.getPlayer(uuid);
             if(player == null) continue;

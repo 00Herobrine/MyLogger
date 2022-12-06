@@ -5,6 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
 import x00Hero.MyLogger.Chat.ChatController;
 import x00Hero.MyLogger.File.PlayerFile;
 import x00Hero.MyLogger.GUI.PlayerMenu;
@@ -16,7 +17,10 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class CommandManager implements CommandExecutor {
-
+    private static final Permission viewPermission = new Permission("mylogger.admin.view"); // possibly make this player dependent
+    private static final Permission alertPermission = new Permission("mylogger.admin.overwatch");
+    private static final Permission debugPermission = new Permission("mylogger.admin.debug");
+    private static final Permission reloadPermission = new Permission("mylogger.admin.reload");
     ArrayList<UUID> debugPlayers = new ArrayList<>();
 
     @Override
@@ -27,10 +31,10 @@ public class CommandManager implements CommandExecutor {
         }
         Player player = (Player) sender;
         switch(command.getName().toLowerCase()) {
-            case "log":
+            case "logger":
                 switch(args[0]) {
                     case "admin":
-                        if(player.hasPermission("mylogger.admin.overwatch")) {
+                        if(player.hasPermission(alertPermission)) {
                             if(!LogController.getModAlerts().contains(player.getUniqueId())) {
                                 LogController.addMod(player);
                                 ChatController.sendMessage(player, 1);
@@ -44,7 +48,7 @@ public class CommandManager implements CommandExecutor {
                         break;
                     case "debug":
                         UUID uuid = player.getUniqueId();
-                        if(player.hasPermission("mylogger.admin.debug")) {
+                        if(player.hasPermission(debugPermission)) {
                             if(debugPlayers.contains(uuid)) {
                                 debugPlayers.remove(uuid);
                                 ChatController.sendMessage(player, 5);
@@ -57,7 +61,7 @@ public class CommandManager implements CommandExecutor {
                         }
                         break;
                     case "reload":
-                        if(player.hasPermission("mylogger.admin.reload")) {
+                        if(player.hasPermission(reloadPermission)) {
                             Main.reloadConfigs();
                             ChatController.sendMessage(player, 11);
                         } else {
@@ -65,21 +69,24 @@ public class CommandManager implements CommandExecutor {
                         }
                         break;
                     case "view":
-                        if(args.length > 1) {
-                            Player onlineTar = Bukkit.getPlayer(args[1]);
-                            UUID target;
-                            if(onlineTar == null) target = Bukkit.getOfflinePlayer(args[1]).getUniqueId();
-                            else target = onlineTar.getUniqueId();
-                            File file = PlayerFile.getPlayerFolder(target);
-                            if(file.exists()) {
-                                PlayerMenu.yearMenu(player, target);
-                                player.sendMessage(ChatController.getMessage(8).replace("{target}", args[1]));
-//                                    ChatController.sendMessage(player, 8);
+                        if(player.hasPermission(viewPermission)) {
+                            if(args.length > 1) {
+                                Player onlineTar = Bukkit.getPlayer(args[1]);
+                                UUID target;
+                                if(onlineTar == null) target = Bukkit.getOfflinePlayer(args[1]).getUniqueId();
+                                else target = onlineTar.getUniqueId();
+                                File file = PlayerFile.getPlayerFolder(target);
+                                if(file.exists()) {
+                                    PlayerMenu.yearMenu(player, target); // possibly migrate this to ChatController.sendMessage(player, String, ReplacementString)
+                                    player.sendMessage(ChatController.getMessage(8).replace("{target}", args[1]));
+                                } else {
+                                    player.sendMessage(ChatController.getMessage(9).replace("{target}", args[1]));
+                                }
                             } else {
-                                player.sendMessage(ChatController.getMessage(9).replace("{target}", args[1]));
+                                ChatController.sendMessage(player, 3);
                             }
                         } else {
-                            ChatController.sendMessage(player, 3);
+                            ChatController.sendMessage(player, 7);
                         }
                         break;
                     default:
@@ -92,5 +99,18 @@ public class CommandManager implements CommandExecutor {
                 break;
         }
         return false;
+    }
+
+    public static Permission getAlertPermission() {
+        return alertPermission;
+    }
+    public static Permission getDebugPermission() {
+        return debugPermission;
+    }
+    public static Permission getReloadPermission() {
+        return reloadPermission;
+    }
+    public static Permission getViewPermission() {
+        return viewPermission;
     }
 }
