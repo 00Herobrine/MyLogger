@@ -25,6 +25,7 @@ public class PlayerMenu {
         autoSkip = Main.getConfigFile().getBoolean("UI.autoSkip");
     }
     private static boolean autoSkip = true;
+    private static DateFormatSymbols dfs = new DateFormatSymbols();
 
     // player = person viewing, UUID = target
     public static void yearMenu(Player player, UUID uuid) {
@@ -73,14 +74,18 @@ public class PlayerMenu {
             rs.addReplacement("{target}", targetName);
             rs.addReplacement("{player}", player.getName());
             rs.addReplacement("{year}", year);
-            String lore = MenuController.getYearLoreFormat();
-            String name = MenuController.getYearNameFormat();
+            String lore = MenuController.getMonthLoreFormat();
+            String name = MenuController.getMonthNameFormat();
             for(File month : yearFolder.listFiles()) {
+                ReplacementString rs2 = new ReplacementString();
                 if(!month.isDirectory()) continue;
                 String monthString = month.getName();
+                int monthInt = Integer.parseInt(monthString);
+                rs2.addReplacement("{month}", dfs.getMonths()[monthInt - 1]);
+                rs2.addReplacement("{monthNum}", monthString);
                 Material material = Material.PAPER;
                 if(MenuController.hasCustomItem(monthString, "month")) material = MenuController.getCustomItem(monthString, "month");
-                ItemBuilder itemBuilder = new ItemBuilder(material, rs.format(name), rs.format(lore));
+                ItemBuilder itemBuilder = new ItemBuilder(material, rs2.format(name), rs2.format(lore));
                 itemBuilder.storeString("year", year);
                 itemBuilder.storeString("month", monthString);
                 itemBuilder.storeString("target", uuid.toString());
@@ -109,13 +114,15 @@ public class PlayerMenu {
             rs.addReplacement("{target}", targetName);
             rs.addReplacement("{player}", player.getName());
             rs.addReplacement("{year}", year);
-            DateFormatSymbols dfs = new DateFormatSymbols();
-            rs.addReplacement("{month}", dfs.getMonths()[monthInt]);
-            rs.addReplacement("{monthShort}", dfs.getShortMonths()[monthInt]);
+            rs.addReplacement("{month}", dfs.getMonths()[monthInt - 1]);
+            rs.addReplacement("{monthShort}", dfs.getShortMonths()[monthInt - 1]);
             String lore = MenuController.getDayLoreFormat();
             String name = MenuController.getDayNameFormat();
+            name = rs.format(name);
+            lore = rs.format(lore);
             for(File day : monthFolder.listFiles()) {
                 String dayString = day.getName().replace(".yml", "");
+                rs.addReplacement("{day}", dayString);
                 Material material = Material.PAPER;
                 if(MenuController.hasCustomItem(dayString, "day")) material = MenuController.getCustomItem(dayString, "day");
                 ItemBuilder itemBuilder = new ItemBuilder(material, rs.format(name), rs.format(lore));
@@ -143,10 +150,12 @@ public class PlayerMenu {
         if(target != null) targetName = target.getName();
         String date = month + "/" + day + "/" + year;
         ReplacementString rs = new ReplacementString();
+        int monthInt = Integer.parseInt(month);
         rs.addReplacement("{target}", targetName);
         rs.addReplacement("{player}", player.getName());
         rs.addReplacement("{year}", year);
         rs.addReplacement("{month}", month);
+        rs.addReplacement("{monthShort}", dfs.getShortMonths()[monthInt - 1]);
         rs.addReplacement("{day}", day);
         rs.addReplacement("{date}", date);
         for(String veinID : log.getKeys(false)) {
@@ -158,7 +167,7 @@ public class PlayerMenu {
             if(matString != null) material = Material.valueOf(matString);
             String name = MenuController.getVeinNameFormat().replace("{veinID}", veinID).replace("{num}", veinNum + "");
             String lore = MenuController.getVeinLoreFormat().replace("{veinID}", veinID).replace("{num}", veinNum + "");
-            ItemBuilder vein = new ItemBuilder(material, amt, name, rs.format(lore));
+            ItemBuilder vein = new ItemBuilder(material, amt, rs.format(name), rs.format(lore));
             vein.storeString("year", year);
             vein.storeString("month", month);
             vein.storeString("day", day);
@@ -183,18 +192,21 @@ public class PlayerMenu {
         Player target = Bukkit.getPlayer(uuid);
         String targetName = uuid.toString();
         if(target != null) targetName = target.getName();
+        int monthInt = Integer.parseInt(month);
         ReplacementString rs = new ReplacementString();
         rs.addReplacement("{veinID}", veinID);
         rs.addReplacement("{target}", targetName);
         rs.addReplacement("{player}", player.getName());
         rs.addReplacement("{year}", year);
         rs.addReplacement("{month}", month);
+        rs.addReplacement("{monthShort}", dfs.getShortMonths()[monthInt - 1]);
         rs.addReplacement("{day}", day);
         String title = MenuController.getBlocksTitleFormat();
         String lore = MenuController.getBlocksLoreFormat();
         for(String blockID : blockSection.getKeys(false)) {
+            if(blockID == null) continue;
             ReplacementString rs2 = new ReplacementString();
-            String light = blockSection.getString(blockID + ".light").replace("(", "").replace(")", "");
+            String light = blockSection.getString(blockID + ".light");
             String time = blockSection.getString(blockID + ".time");
             String location = blockSection.getString(blockID + ".location");
             String[] locations = location.split("@");
@@ -202,7 +214,7 @@ public class PlayerMenu {
             String[] coords = locations[1].split(",");
             String[] lights = light.split("");
             rs2.addReplacement("{blockLight}", lights[0]);
-            rs2.addReplacement("{skyLight}", lights[1]);
+            rs2.addReplacement("{skyLight}", lights[1].replace("(", "").replace(")", ""));
             rs2.addReplacement("{time}", time);
             rs2.addReplacement("{world}", world);
             rs2.addReplacement("{x}", coords[0]);

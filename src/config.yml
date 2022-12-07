@@ -23,28 +23,28 @@ UI:
         custom: # specify number specific materials
             2022: CHEST
     months:
-        title: '&7Months of {year}'
-        name: '&7{month}'
-        lore: '&7View days of {month}.'
+        title: "&7Months of {year}"
+        name: "&7{month}"
+        lore: "&7View days of {month}."
         material: CHEST
         custom:
-            #1: PAPER
-            #2: OAK_WOOD
+        #1: PAPER
+        #2: OAK_WOOD
     days:
-        title: '&7Days of {monthShort}. {year}'
-        name: '&7{day}'
-        lore: '&7View months of {Year}.'
+        title: "&7Days of {monthShort}. {year}"
+        name: "&7{day}"
+        lore: "&7View veins of {monthShort}. {day}"
         material: PAPER
         custom:
-            #1: PAPER
+        #1: PAPER
     veins:
-        title: '&7Veins of {month}/{day}/{year}'
-        name: '&7Vein #{num}'
+        title: "&7Veins of {month}/{day}/{year}"
+        name: "&7Vein #{num}"
         lore: "&8ID: {veinID}\n&7View vein info."
         #deepslate-alts: false # includes the deepslate alternatives to normal ores
     blocks:
-        title: '&7Viewing Vein ({veinID})'
-        name: '&6{World} @ {x}, {y}, {z}'
+        title: "&7Viewing Vein ({veinID})"
+        name: "&6{World} @ {x}, {y}, {z}"
         lore: "&8Light: {blockLight} ({skyLight})\n&8{time}"
     colors:
         DIAMOND_ORE: '&b'
