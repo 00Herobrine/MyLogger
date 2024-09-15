@@ -75,9 +75,13 @@ public class MenuPage {
         menuItems.add(menuItem);
     }
 
-    public void addItem(MenuItem menuItem) {
+    public void addItem(MenuItem menuItem){
+        addItem(menuItem, false);
+    }
+
+    public void addItem(MenuItem menuItem, boolean expandCheck) {
         menuItem.setMenuPage(this);
-        expandCheck(menuItem);
+        if(expandCheck) expandCheck(menuItem);
         if(menuItem.isEnabled()) inventory.setItem(menuItem.getSlot(), menuItem.getItemStack());
         menuItems.add(menuItem);
     }

@@ -143,8 +143,30 @@ public class Menu {
         setPage(curPage, menuPage);
     }
 
-    public Menu(String title, ArrayList<MenuItem> menuItems, int slots, boolean fillEmpty, boolean cancelClicks) {
-/*        HashMap<Integer, MenuPage> updatedPages = new HashMap<>();
+    public Menu(String title, ArrayList<MenuItem> menuItems, boolean fillEmpty, boolean cancelClicks) {
+        int lastSlot = 0;
+        for(MenuItem item : menuItems) {
+            int itemSlot = item.getSlot();
+            if(itemSlot > lastSlot) lastSlot = itemSlot;
+        }
+        MenuPage menuPage = new MenuPage(title, getAdjustedAmount(lastSlot), fillEmpty, cancelClicks);
+        for(MenuItem menuItem : menuItems) {
+            int itemSlot = menuItem.getSlot();
+            if(itemSlot > 53) continue;
+            if(itemSlot == -1) {
+                menuItem.setSlot(menuPage.getInventory().firstEmpty());
+            }
+            menuPage.addItem(menuItem);
+        }
+    }
+
+    public void addPage(Integer pageNum, MenuPage menuPage) {
+        menuPages.put(pageNum, menuPage);
+
+    }
+
+    /*public Menu(String title, ArrayList<MenuItem> menuItems, int slots, boolean fillEmpty, boolean cancelClicks) {
+            HashMap<Integer, MenuPage> updatedPages = new HashMap<>();
         MenuPage tempPage = new MenuPage("temp", 54, fillEmpty, cancelClicks);
         for(MenuItem menuItem2 : menuItems) {
             int itemPageInt = menuItem2.getPage();
@@ -180,7 +202,7 @@ public class Menu {
         for(Integer page : updatedPages.keySet()) {
             setPage(page, updatedPages.get(page));
             getMenuPage(1).set;
-        }*/
+        }
         // bro idek anymore ^^
         selPage = 1;
         int curPage = 1;
@@ -213,7 +235,7 @@ public class Menu {
             if(menuItem.getSlot() > itemPage.getLastSlot()) itemPage.setLastSlot(menuItem.getSlot());
             setPage(itemPageInt, itemPage);
         }
-    }
+    }*/
 
     public void openMenu(Player player) {
         openMenu(player, 1);
